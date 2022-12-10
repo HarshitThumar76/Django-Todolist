@@ -1,0 +1,45 @@
+{% extends "./basic.html" %}
+{% block body %}
+    <!--Container-->
+    <div class="container">
+        <h3 class="text-center my-4">TODOs List</h3>
+        <!--Form-->
+        <form action="{% url 'addItem' %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <br />
+            <button type="submit" class="btn btn-primary">Add to Item</button>
+            <a href="{% url 'deleteItemAll' %}">
+                <button class="btn btn-primary">Remove all Item</button>
+            </a>
+        </form>
+        <!--Table-->
+        <div id="items" class="my-4">
+            <h3>Your Items</h3>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Sr No.</th>
+                        <th scope="col">Item Title</th>
+                        <th scope="col">Item Description</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    {% for todo_item in todo_items %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ todo_item.title }}</td>
+                            <td>{{ todo_item.description }}</td>
+                            <td>
+                                <a href="{% url 'deleteItem' todo_item.id %}">
+                                    <button class="btn btn-primary">Delete</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock body %}
