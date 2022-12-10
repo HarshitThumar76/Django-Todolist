@@ -8,38 +8,77 @@
             {% csrf_token %}
             {{ form }}
             <br />
-            <button type="submit" class="btn btn-primary">Add to Item</button>
-            <a href="{% url 'deleteItemAll' %}">
-                <button class="btn btn-primary">Remove all Item</button>
-            </a>
+            <button type="submit" class="ml-5 btn btn-primary">
+                <i class="fas fa-calendar-plus"> </i> Add Task
+            </button>
+            <a href="{% url 'deleteAllItem' %}"
+               class="mr-5 btn btn-danger float-right"><i class="fas fa-trash-alt">   </i> Delete all</a>
+            <a href="{% url 'deleteComplete' %}"
+               class="mr-1 btn btn-danger float-right"><i class="fas fa-trash-alt">   </i> Delete Completed</a>
         </form>
         <!--Table-->
         <div id="items" class="my-4">
-            <h3>Your Items</h3>
+            <h3>Your Todo Task's</h3>
             <table class="table">
+                <colgroup>
+                    <col class="col-md-1" />
+                    <col class="col-md-2" />
+                    <col class="col-md-7" />
+                    <col class="col-md-2" />
+                </colgroup>
                 <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Sr No.</th>
-                        <th scope="col">Item Title</th>
-                        <th scope="col">Item Description</th>
-                        <th scope="col">Action</th>
-                    </tr>
+                    {% if todo_items %}
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    {% endif %}
                 </thead>
                 <tbody id="tbody">
-                    {% for todo_item in todo_items %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ todo_item.title }}</td>
-                            <td>{{ todo_item.description }}</td>
-                            <td>
-                                <a href="{% url 'deleteItem' todo_item.id %}">
-                                    <button class="btn btn-primary">Delete</button>
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
+                    {% if todo_items %}
+                        {% for todo_item in todo_items %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ todo_item.title }}</td>
+                                <td>{{ todo_item.description }}</td>
+                                <td>
+                                    {% if todo_item.is_completed %}
+                                        <a href="{% url 'isComplete' todo_item.id %}">
+                                            <button class="btn btn-outline-success">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'isComplete' todo_item.id %}">
+                                            <button class="btn btn-light">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                    <a href="{% url 'deleteItem' todo_item.id %}">
+                                        <button class="btn btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col my-4">
+                            <div class="alert alert-warning text-center" role="alert">
+                                <p>You have nothing to do.Please add to do task's</p>
+                            </div>
+                        </div>
+                    {% endif %}
                 </tbody>
             </table>
         </div>
     </div>
 {% endblock body %}
+{% block style %}
+    .container {
+    background-color: lightblue;
+    }
+{% endblock style %}

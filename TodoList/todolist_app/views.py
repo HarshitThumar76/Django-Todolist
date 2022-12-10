@@ -24,11 +24,23 @@ def addItem(request):
     return redirect('home')
 
 
+def isComplete(request, todo_id):
+    todo_item = TodoItem.objects.get(pk=todo_id)
+    todo_item.is_completed = True
+    todo_item.save()
+    return redirect('home')
+
+
+def deleteComplete(request):
+    TodoItem.objects.filter(is_completed__exact=True).delete()
+    return redirect('home')
+
+
 def deleteItem(request, todo_id):
     TodoItem.objects.get(pk=todo_id).delete()
     return redirect('home')
 
 
-def deleteItemAll(request):
+def deleteAllItem(request):
     TodoItem.objects.all().delete()
     return redirect('home')
