@@ -13,3 +13,11 @@ class TodoListForm(forms.Form):
                                       attrs={
                                         'class': 'form-control', 'rows': '3', 'placeholder': 'Enter Description'
                                       }))
+
+
+class TodoListSearchForm(forms.Form):
+    search_string = forms.CharField(label='', max_length=50,
+                                    widget=forms.TextInput(
+                                        attrs={
+                                            'class': 'form-control mr-sm-2', 'type': 'search', 'placeholder': 'Search...', 'aria-label': 'Search'
+                                        }))

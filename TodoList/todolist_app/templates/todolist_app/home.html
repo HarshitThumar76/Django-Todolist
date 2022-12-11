@@ -66,11 +66,19 @@
                             </tr>
                         {% endfor %}
                     {% else %}
-                        <div class="col my-4">
-                            <div class="alert alert-warning text-center" role="alert">
-                                <p>You have nothing to do.Please add to do task's</p>
+                        {% if not is_search %}
+                            <div class="col my-4">
+                                <div class="alert alert-warning text-center" role="alert">
+                                    <p>You have nothing to do.Please add to do task's</p>
+                                </div>
                             </div>
-                        </div>
+                        {% else %}
+                            <div class="col my-4">
+                                <div class="alert alert-warning text-center" role="alert">
+                                    <p>No task found</p>
+                                </div>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 </tbody>
             </table>
