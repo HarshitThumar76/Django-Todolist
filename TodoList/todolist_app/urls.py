@@ -12,4 +12,6 @@ urlpatterns = [
     path('deletecomplete/', views.deleteComplete, name='deleteComplete'),
     path('deleteallitem/', views.deleteAllItem, name='deleteAllItem'),
     path('search/', views.searchItem, name='searchItem'),
+    path('login/', views.userLogin, name='userLogin'),
+    path('logout/', views.userLogout, name='userLogout'),
 ]
