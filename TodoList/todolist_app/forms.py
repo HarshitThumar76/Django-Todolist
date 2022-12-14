@@ -1,5 +1,50 @@
 from django import forms
+from django.contrib.auth.models import User
 
+
+class SignUpForm(forms.Form):
+    username = forms.CharField(label='Username', max_length=50,
+                               widget=forms.TextInput(
+                                   attrs={
+                                       'class': 'form-control alert-info', 'autocomplete': 'off', 'placeholder': 'Username', 'help_text': 'Enter Valid username'
+                                   }))
+
+    firstname = forms.CharField(label='First Name', max_length=50,
+                                widget=forms.TextInput(
+                                    attrs={
+                                        'class': 'form-control alert-info', 'autocomplete': 'off', 'placeholder': 'First Name'
+                                    }))
+
+    lastname = forms.CharField(label='Last Name', max_length=50,
+                               widget=forms.TextInput(
+                                   attrs={
+                                       'class': 'form-control alert-info', 'autocomplete': 'off', 'placeholder': 'Last Name'
+                                   }))
+
+    email = forms.EmailField(label='Email address', max_length=50,
+                            widget=forms.TextInput(
+                                attrs={
+                                    'class': 'form-control alert-info', 'type': 'email', 'autocomplete': 'off', 'placeholder': 'name@example.com'
+                                }))
+
+    password = forms.CharField(label='Choose Password', max_length=50,
+                               widget=forms.TextInput(
+                                   attrs={
+                                       'class': 'form-control alert-info', 'type': 'password', 'autocomplete': 'off', 'placeholder': 'Password'
+                                   }))
+
+    password_confirm = forms.CharField(label='Confirm Password', max_length=50,
+                                       widget=forms.TextInput(
+                                           attrs={
+                                               'class': 'form-control alert-info', 'type': 'password', 'autocomplete': 'off', 'placeholder': 'Password'
+                                           }))
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        username_list = list(map(lambda lm: lm[0], User.objects.values_list('username').distinct()))
+        if username in username_list:
+            raise forms.ValidationError('Please enter a uniqe username')
+        return username
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Username', max_length=50,
@@ -11,7 +56,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(label='Password', max_length=50,
                                widget=forms.TextInput(
                                    attrs={
-                                       'class': 'form-control alert-info', 'autocomplete': 'off', 'placeholder': 'Password'
+                                       'class': 'form-control alert-info', 'type': 'password', 'autocomplete': 'off', 'placeholder': 'Password'
                                    }))
 
 
