@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 
 class SignUpForm(forms.Form):
@@ -22,10 +23,10 @@ class SignUpForm(forms.Form):
                                    }))
 
     email = forms.EmailField(label='Email address', max_length=50,
-                            widget=forms.TextInput(
-                                attrs={
-                                    'class': 'form-control alert-info', 'type': 'email', 'autocomplete': 'off', 'placeholder': 'name@example.com'
-                                }))
+                             widget=forms.TextInput(
+                                 attrs={
+                                     'class': 'form-control alert-info', 'type': 'email', 'autocomplete': 'off', 'placeholder': 'name@example.com'
+                                 }))
 
     password = forms.CharField(label='Choose Password', max_length=50,
                                widget=forms.TextInput(
@@ -41,10 +42,20 @@ class SignUpForm(forms.Form):
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        username_list = list(map(lambda lm: lm[0], User.objects.values_list('username').distinct()))
+        username_list = list(
+            map(lambda lm: lm[0], User.objects.values_list('username').distinct()))
         if username in username_list:
             raise forms.ValidationError('Please enter a uniqe username')
         return username
+
+    def clean_password_confirm(self):
+        password = self.cleaned_data.get('password')
+        password_confirm = self.cleaned_data.get('password_confirm')
+        if password != password_confirm:
+            raise forms.ValidationError(
+                'Your password and confirmation password do not match.')
+        return password_confirm
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Username', max_length=50,
@@ -58,6 +69,22 @@ class LoginForm(forms.Form):
                                    attrs={
                                        'class': 'form-control alert-info', 'type': 'password', 'autocomplete': 'off', 'placeholder': 'Password'
                                    }))
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        username_list = list(
+            map(lambda lm: lm[0], User.objects.values_list('username').distinct()))
+        if not username in username_list:
+            raise forms.ValidationError('User is not Found!! Please Signup')
+        return username
+
+    def clean_password(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        if user is None:
+            raise forms.ValidationError('Incorrect Password')
+        return password
 
 
 class TodoListForm(forms.Form):

@@ -13,9 +13,13 @@ def home(request):
     login_form = LoginForm(label_suffix='')
     signup_form = SignUpForm(label_suffix='')
 
-    data = {'todo_items': todo_items, 'form': form,
-            'search_form': search_form, 'login_form': login_form, 'signup_form': signup_form}
-    return render(request, 'todolist_app/home.html', data)
+    if request.user.is_authenticated:
+        data = {'todo_items': todo_items, 'form': form,
+                'search_form': search_form, 'login_form': login_form, 'signup_form': signup_form}
+        return render(request, 'todolist_app/home.html', data)
+
+    else:
+        return render(request, 'todolist_app/login.html', {'login_form': login_form})
 
 
 def searchItem(request):
@@ -67,14 +71,16 @@ def deleteAllItem(request):
 
 
 def userLogin(request):
-    form = LoginForm(request.POST)
-    if form.is_valid:
+    login_form = LoginForm(request.POST)
+    if login_form.is_valid():
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-    return redirect('home')
+            return redirect('home')
+    else:
+        return render(request, 'todolist_app/login.html', {'login_form': login_form})
 
 
 def userLogout(request):
@@ -83,8 +89,8 @@ def userLogout(request):
 
 
 def userSignUp(request):
-    form = SignUpForm(request.POST)
-    if form.is_valid():
+    signup_form = SignUpForm(request.POST)
+    if signup_form.is_valid():
         username = request.POST.get('username')
         firstname = request.POST.get('firstname')
         lastname = request.POST.get('lastname')
@@ -100,5 +106,6 @@ def userSignUp(request):
             new_user.last_name = lastname
             new_user.email = email
             new_user.save()
-
-    return redirect('home')
+            return redirect('home')
+    else:
+        return render(request, 'todolist_app/signup.html', {'signup_form': signup_form})
