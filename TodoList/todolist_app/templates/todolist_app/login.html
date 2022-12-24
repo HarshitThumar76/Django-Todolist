@@ -1,22 +1,29 @@
 {% extends "./basic.html" %}
 {% block body %}
     <!-- Login Modal -->
+    {% if is_signup %}
+        <div class="alert alert-success head alert-dismissible fade show"
+             role="alert">
+            Your account has been registered successfully. You can now login
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true"><small><strong>x</strong></small></span>
+            </button>
+        </div>
+    {% endif %}
     <div class="container login">
-        <div class="head">
+        <div class="head mb-3">
             <h1>Login</h1>
         </div>
         <form action="{% url 'userLogin' %}" method="post">
             {% csrf_token %}
-            {% comment %} {{ login_form }} {% endcomment %}
             {% for form_field in login_form %}
-                {{ form_field.label_tag }}
                 {{ form_field }}
                 <p class="text-white">{{ form_field.errors.as_text }}</p>
             {% endfor %}
             <div class="head">
-                <button type="submit" value="Submit" class="btn btn-login mr-2">Login</button>
+                <button type="submit" value="Submit" class="btn btn-login mr-3">Login</button>
                 <a href="{% url 'userSignUp' %}">
-                    <button type="button" class="btn btn-login">Sign Up</button>
+                    <button type="button" class="btn btn-login ml-2 ">Sign Up</button>
                 </a>
             </div>
         </form>
@@ -25,6 +32,9 @@
 {% block style %}
     body {
     background: #ABCDEF;
+    }
+    .container{
+    width: 30%;
     }
     .head {
     display: flex;

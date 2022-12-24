@@ -2,7 +2,7 @@
 {% block body %}
     <!-- SignupModal Modal -->
     <div class="container login">
-        <div class="head">
+        <div class="head mb-2">
             <h1>Sign Up</h1>
         </div>
         <form action="{% url 'userSignUp' %}" method="post">
@@ -15,7 +15,7 @@
             <div class="head">
                 <button type="submit" value="Submit" class="btn btn-login mr-2">Sign Up</button>
                 <a href="{% url 'home' %}">
-                    <button type="button" class="btn btn-login">Login</button>
+                    <button type="button" class="btn btn-login ml-3">Login</button>
                 </a>
             </div>
         </form>
