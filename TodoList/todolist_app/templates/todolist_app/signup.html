@@ -10,7 +10,7 @@
             {% for field in signup_form %}
                 {{ field.label_tag }}
                 {{ field }}
-                <p class="text-white">{{ field.errors.as_text }}</p>
+                <p class="text-white">{{ field.errors|striptags }}</p>
             {% endfor %}
             <div class="head">
                 <button type="submit" value="Submit" class="btn btn-login mr-2">Sign Up</button>

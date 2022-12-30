@@ -37,49 +37,38 @@
                     {% endif %}
                 </thead>
                 <tbody id="tbody">
-                    {% if todo_items %}
-                        {% for todo_item in todo_items %}
-                            <tr>
-                                <td>{{ forloop.counter }}</td>
-                                <td>{{ todo_item.title }}</td>
-                                <td>{{ todo_item.description }}</td>
-                                <td>
-                                    {% if todo_item.is_completed %}
-                                        <a href="{% url 'isComplete' todo_item.id %}">
-                                            <button class="btn btn-outline-success">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                        </a>
-                                    {% else %}
-                                        <a href="{% url 'isComplete' todo_item.id %}">
-                                            <button class="btn btn-light">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                        </a>
-                                    {% endif %}
-                                    <a href="{% url 'deleteItem' todo_item.id %}">
-                                        <button class="btn btn-outline-danger">
-                                            <i class="fas fa-trash"></i>
+                    {% for todo_item in todo_items %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ todo_item.title }}</td>
+                            <td>{{ todo_item.description }}</td>
+                            <td>
+                                {% if todo_item.is_completed %}
+                                    <a href="{% url 'isComplete' todo_item.id %}">
+                                        <button class="btn btn-outline-success">
+                                            <i class="fas fa-check"></i>
                                         </button>
                                     </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        {% if not is_search %}
-                            <div class="col my-4">
-                                <div class="alert alert-warning text-center" role="alert">
-                                    <p>You have nothing to do.Please add to do task's</p>
-                                </div>
-                            </div>
-                        {% else %}
-                            <div class="col my-4">
-                                <div class="alert alert-warning text-center" role="alert">
-                                    <p>No task found</p>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endif %}
+                                {% else %}
+                                    <a href="{% url 'isComplete' todo_item.id %}">
+                                        <button class="btn btn-light">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'deleteItem' todo_item.id %}">
+                                    <button class="btn btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% for message in messages %}
+                        <div class="col my-4">
+                            <div class="alert alert-{{ message.tags }} text-center" role="alert">{{ message }}</div>
+                        </div>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

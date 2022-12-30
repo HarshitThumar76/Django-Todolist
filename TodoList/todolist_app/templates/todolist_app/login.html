@@ -1,14 +1,16 @@
 {% extends "./basic.html" %}
 {% block body %}
     <!-- Login Modal -->
-    {% if is_signup %}
-        <div class="alert alert-success head alert-dismissible fade show"
-             role="alert">
-            Your account has been registered successfully. You can now login
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true"><small><strong>x</strong></small></span>
-            </button>
-        </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} head alert-dismissible fade show"
+                 role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"><small><strong>x</strong></small></span>
+                </button>
+            </div>
+        {% endfor %}
     {% endif %}
     <div class="container login">
         <div class="head mb-3">
@@ -18,7 +20,7 @@
             {% csrf_token %}
             {% for form_field in login_form %}
                 {{ form_field }}
-                <p class="text-white">{{ form_field.errors.as_text }}</p>
+                <p class="text-white">{{ form_field.errors | striptags }}</p>
             {% endfor %}
             <div class="head">
                 <button type="submit" value="Submit" class="btn btn-login mr-3">Login</button>

@@ -1,44 +1,38 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from .models import TodoItem
+from django.contrib.auth import authenticate, password_validation
+from django.contrib.auth.forms import UserCreationForm
+from django.utils.translation import gettext_lazy as _
 
 
-class SignUpForm(forms.Form):
-    username = forms.CharField(label='Username', max_length=50,
-                               widget=forms.TextInput(
-                                   attrs={
-                                       'class': 'form-control alert-info', 'autocomplete': 'off', 'placeholder': 'Username', 'help_text': 'Enter Valid username'
-                                   }))
+class SignUpForm(UserCreationForm):
 
-    firstname = forms.CharField(label='First Name', max_length=50,
-                                widget=forms.TextInput(
-                                    attrs={
-                                        'class': 'form-control alert-info', 'autocomplete': 'off', 'placeholder': 'First Name'
-                                    }))
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control alert-info', 'autocomplete': 'off', 'placeholder': 'Username', 'help_text': 'Enter Valid username'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control alert-info', 'autocomplete': 'off', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control alert-info', 'autocomplete': 'off', 'placeholder': 'Last Name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control alert-info', 'autocomplete': 'off', 'placeholder': 'name@example.com'}),
+        }
 
-    lastname = forms.CharField(label='Last Name', max_length=50,
-                               widget=forms.TextInput(
-                                   attrs={
-                                       'class': 'form-control alert-info', 'autocomplete': 'off', 'placeholder': 'Last Name'
-                                   }))
+    password1 = forms.CharField(
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput(
+            attrs={'autocomplete': 'new-password', 'class': 'form-control alert-info', 'placeholder': 'Password'}),
+        help_text=password_validation.password_validators_help_text_html(),
+    )
 
-    email = forms.EmailField(label='Email address', max_length=50,
-                             widget=forms.TextInput(
-                                 attrs={
-                                     'class': 'form-control alert-info', 'type': 'email', 'autocomplete': 'off', 'placeholder': 'name@example.com'
-                                 }))
-
-    password = forms.CharField(label='Choose Password', max_length=50,
-                               widget=forms.TextInput(
-                                   attrs={
-                                       'class': 'form-control alert-info', 'type': 'password', 'autocomplete': 'off', 'placeholder': 'Password'
-                                   }))
-
-    password_confirm = forms.CharField(label='Confirm Password', max_length=50,
-                                       widget=forms.TextInput(
-                                           attrs={
-                                               'class': 'form-control alert-info', 'type': 'password', 'autocomplete': 'off', 'placeholder': 'Password'
-                                           }))
+    password2 = forms.CharField(
+        label=_("Password confirmation"),
+        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password',
+                                   'class': 'form-control alert-info',  'placeholder': 'Password'}),
+        strip=False,
+        help_text=_("Enter the same password as before, for verification."),
+    )
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
@@ -47,14 +41,6 @@ class SignUpForm(forms.Form):
         if username in username_list:
             raise forms.ValidationError('Please enter a uniqe username')
         return username
-
-    def clean_password_confirm(self):
-        password = self.cleaned_data.get('password')
-        password_confirm = self.cleaned_data.get('password_confirm')
-        if password != password_confirm:
-            raise forms.ValidationError(
-                'Your password and confirmation password do not match.')
-        return password_confirm
 
 
 class LoginForm(forms.Form):
@@ -87,18 +73,14 @@ class LoginForm(forms.Form):
         return password
 
 
-class TodoListForm(forms.Form):
-    title = forms.CharField(label='Title', max_length=100,
-                            widget=forms.TextInput(
-                                attrs={
-                                    'class': 'form-control', 'aria-describedby': 'titlehelp', 'placeholder': 'Enter Title'
-                                }))
-
-    description = forms.CharField(label='Description', max_length=1000,
-                                  widget=forms.Textarea(
-                                      attrs={
-                                        'class': 'form-control', 'rows': '3', 'placeholder': 'Enter Description'
-                                      }))
+class TodoListForm(forms.ModelForm):
+    class Meta:
+        model = TodoItem
+        fields = ['title', 'description']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'aria-describedby': 'titlehelp', 'placeholder': 'Enter Title'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': 'Enter Description'}),
+        }
 
 
 class TodoListSearchForm(forms.Form):
