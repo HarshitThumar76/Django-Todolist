@@ -97,12 +97,16 @@ def userLogout(request):
 
 
 def userSignUp(request):
-    signup_form = SignUpForm(request.POST, label_suffix='')
     login_form = LoginForm(label_suffix='')
-    if signup_form.is_valid():
-        signup_form.save()
-        messages.success(
-            request, 'Your account has been registered successfully. You can now login')
-        return render(request, 'todolist_app/login.html', {'login_form': login_form})
+    if request.method == 'POST':
+        signup_form = SignUpForm(request.POST, label_suffix='')
+        if signup_form.is_valid():
+            signup_form.save()
+            messages.success(
+                request, 'Your account has been registered successfully. You can now login')
+            return render(request, 'todolist_app/login.html', {'login_form': login_form})
+        else:
+            return render(request, 'todolist_app/signup.html', {'signup_form': signup_form})
     else:
+        signup_form = SignUpForm(label_suffix='')
         return render(request, 'todolist_app/signup.html', {'signup_form': signup_form})
