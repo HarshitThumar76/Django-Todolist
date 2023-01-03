@@ -1,5 +1,7 @@
+{% load cache %}
 <!doctype html>
 <html lang="en">
+    {% cache 604800 head %}
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
@@ -18,8 +20,10 @@
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js"></script>
         <title>TODOs List</title>
     </head>
+    {% endcache %}
     <body>
         <!--Navbar-->
+        {% cache 604800 Navbar request.user.username %}
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="{% url 'home' %}">TODOs List</a>
             <button class="navbar-toggler"
@@ -61,6 +65,7 @@
                 {% endif %}
             </div>
         </nav>
+        {% endcache %}
         {% block body %}
         {% endblock body %}
         <style>
