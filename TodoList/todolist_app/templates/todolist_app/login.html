@@ -18,7 +18,7 @@
         </div>
         <form action="{% url 'userLogin' %}" method="post">
             {% csrf_token %}
-            {% for form_field in login_form %}
+            {% for form_field in form %}
                 {{ form_field }}
                 <p class="text-white">{{ form_field.errors | striptags }}</p>
             {% endfor %}

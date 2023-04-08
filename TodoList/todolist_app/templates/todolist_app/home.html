@@ -4,7 +4,7 @@
     <div class="container">
         <h3 class="text-center my-4">TODOs List</h3>
         <!--Form-->
-        <form action="{% url 'addItem' %}" method="post">
+        <form action="" method="post">
             {% csrf_token %}
             {{ form }}
             <br />
@@ -44,23 +44,28 @@
                             <td>{{ todo_item.description }}</td>
                             <td>
                                 {% if todo_item.is_completed %}
-                                    <button class="btn btn-outline-success">
+                                    <button class="btn btn-outline-success" disabled>
                                         <i class="fas fa-check"></i>
                                     </button>
-                                {% else %}
-                                    <a href="{% url 'isComplete' todo_item.id %}">
-                                        <button class="btn btn-light">
-                                            <i class="fas fa-check"></i>
-                                        </button>
-                                    </a>
-                                {% endif %}
-                                {% if todo_item.is_completed %}
+                                    <button class="btn btn-outline-info" disabled>
+                                        <i class="fas fa-edit"></i>
+                                    </button>
                                     <a href="{% url 'deleteItem' todo_item.id %}">
                                         <button class="btn btn-outline-danger">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </a>
                                 {% else %}
+                                    <a href="{% url 'isComplete' todo_item.id %}">
+                                        <button class="btn btn-light">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </a>
+                                    <a href="{% url 'updateItem' todo_item.id %}">
+                                        <button class="btn btn-outline-info">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </a>
                                     <button class="btn btn-outline-danger" disabled>
                                         <i class="fas fa-trash"></i>
                                     </button>
